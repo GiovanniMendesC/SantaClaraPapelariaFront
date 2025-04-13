@@ -7,29 +7,27 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
-import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import Home from "./pages/home/HomePage"
 import Login from './pages/login/LoginPage';
 import Pedidos from './pages/pedidos/PedidosPage';
 import Carrinho from './pages/carrinho/CarrinhoPage';
+import Cadastro from './pages/login/CadastroPage';
 
 const { Header, Sider, Content } = Layout;
 
 const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const [redirectPathAfterLogin, setRedirectPathAfterLogin] = useState<string | null>(null);
   const location = useLocation();
-  const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
     
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh'}}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
@@ -86,6 +84,7 @@ const App: React.FC = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/pedidos" element={<Pedidos/>} />
               <Route path="/carrinho" element={<Carrinho/>} />
+              <Route path="/cadastro" element={<Cadastro/>} />
             </Routes>
         </Content>
       </Layout>

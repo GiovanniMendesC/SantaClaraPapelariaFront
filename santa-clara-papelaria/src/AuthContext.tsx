@@ -6,7 +6,7 @@ interface AuthContextType {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   loginModalOpen: boolean;
   setLoginModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  login: (username: string) => void;
+  login: (login: string, group: string, id: string, username: string) => void;
   logout: () => void;
 }
 
@@ -27,7 +27,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
 
   // Função de login
-  const login = (username: string) => {
+  const login = (login: string, group: string, id: string, username: string) => {
+    localStorage.setItem('login', login);
+    localStorage.setItem('group', group);
+    localStorage.setItem('id', id);
     localStorage.setItem('username', username);
     setIsLoggedIn(true);
     setLoginModalOpen(false);
@@ -36,6 +39,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Função de logout
   const logout = () => {
     localStorage.removeItem('username');
+    localStorage.removeItem('group');
+    localStorage.removeItem('login');
+    localStorage.removeItem('id');
     setIsLoggedIn(false);
   };
 
