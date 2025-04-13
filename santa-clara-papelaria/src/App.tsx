@@ -9,7 +9,6 @@ import {
 import { Button, Layout, Menu, theme } from 'antd';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { Modal } from 'antd';
 
 import Home from "./pages/home/HomePage"
 import Login from './pages/login/LoginPage';
@@ -21,21 +20,13 @@ const { Header, Sider, Content } = Layout;
 const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [redirectPathAfterLogin, setRedirectPathAfterLogin] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
-  const handleMenuClick = (caminho: string) => {
-    const user = localStorage.getItem("username");
-
-    if(user){
-      navigate(caminho);
-    } else{
-      setLoginModalOpen(true);
-    };
-  }
+    
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -63,7 +54,7 @@ const App: React.FC = () => {
             {
               key: '/pedidos',
               icon: <UploadOutlined style={{fontSize: '20px'}}/>,
-              label: <span style={{cursor: 'pointer'}} onClick={() => handleMenuClick('/pedidos')}>Pedidos</span>,
+              label: <Link to='/pedidos'>Pedidos</Link>,
             },
           ]}
         />
@@ -90,20 +81,12 @@ const App: React.FC = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <Modal
-            title="Login Necessário"
-            open={loginModalOpen}
-            onCancel={() => setLoginModalOpen(false)}
-            footer={null}
-          >
-            <Login />
-          </Modal>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/pedidos" element={<Pedidos/>} />
-            <Route path="/carrinho" element={<Carrinho/>} />
-          </Routes>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/pedidos" element={<Pedidos/>} />
+              <Route path="/carrinho" element={<Carrinho/>} />
+            </Routes>
         </Content>
       </Layout>
     </Layout>
