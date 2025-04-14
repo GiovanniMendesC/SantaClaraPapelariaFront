@@ -73,9 +73,11 @@ const Login = () => {
                 <Button onClick={handleLogout} type="primary" danger>
                     Sair
                 </Button>
-                <Link to={`/${loginName}`} style={{ textDecoration: 'none', marginLeft: '50px'}}>
-                    <Button type='primary'>Alterar dados</Button>
-                </Link>
+                {localStorage.getItem('group') == 'C' && (
+                  <Link to={`/conta/${localStorage.getItem('id')}`} style={{ textDecoration: 'none', marginLeft: '50px'}}>
+                      <Button type='primary'>Alterar dados</Button>
+                  </Link>
+                )}
             </div>
             </>
         ) : (

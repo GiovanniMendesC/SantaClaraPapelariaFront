@@ -60,7 +60,6 @@ const Cadastro = () =>{
                 required
                 />
                 <Input
-                type="number"
                 size="large"
                 placeholder="Telefone"
                 maxLength={15}

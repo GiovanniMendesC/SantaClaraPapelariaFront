@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 // Definindo o tipo do contexto
@@ -23,17 +24,52 @@ export const useAuth = () => {
 
 // Componente Provider que envolve a aplicação e fornece os valores do contexto
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [data, setData] = useState<{
+    nome: string;
+    telefone: string;
+    email: string;
+    senha: string;
+    cliente_especial: boolean;
+  }>({
+    nome: '',
+    telefone: '',
+    email: '',
+    senha: '',
+    cliente_especial: false
+  });
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem('username'));
   const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
 
   // Função de login
-  const login = (login: string, group: string, id: string, username: string) => {
-    localStorage.setItem('login', login);
-    localStorage.setItem('group', group);
-    localStorage.setItem('id', id);
-    localStorage.setItem('username', username);
-    setIsLoggedIn(true);
-    setLoginModalOpen(false);
+  const login = async (login: string, group: string, id: string, username: string) => {
+    if(group == 'V'){
+        localStorage.setItem('login', login);
+        localStorage.setItem('group', group);
+        localStorage.setItem('username', username);
+            
+        setIsLoggedIn(true);
+        setLoginModalOpen(false);
+    }else if(group == 'C'){
+        const response = await axios.get(`http://127.0.0.1:8000/api/cadastro/clientes/${id}/exibir/`);
+        setData(response.data);
+
+        if(data){
+            localStorage.setItem('login', response.data.telefone);
+            localStorage.setItem('group', group);
+            localStorage.setItem('id', id);
+            localStorage.setItem('username', response.data.nome);
+                    
+            setIsLoggedIn(true);
+            setLoginModalOpen(false);
+            console.log("chegou no final do login")
+            console.log(response.data)
+            console.log(id)
+            console.log(localStorage.getItem('login'))
+            console.log(localStorage.getItem('group'))
+            console.log(localStorage.getItem('id'))
+            console.log(localStorage.getItem('username'))
+        }
+    }
   };
 
   // Função de logout

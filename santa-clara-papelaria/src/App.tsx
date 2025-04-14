@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   BarChartOutlined,
+  LoginOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ShopOutlined,
@@ -17,6 +18,8 @@ import Pedidos from './pages/pedidos/PedidosPage';
 import Carrinho from './pages/carrinho/CarrinhoPage';
 import Cadastro from './pages/registro/cadastro/CadastroPage';
 import Relatorios from './pages/relatorios/RelatoriosPage';
+import Conta from './pages/registro/contas/ContaPage';
+import ContaUpdate from './pages/registro/contas/ContaUpdate';
 
 const { Header, Sider, Content } = Layout;
 
@@ -48,8 +51,13 @@ const App: React.FC = () => {
             },
             {
               key: '/login',
-              icon: <UserOutlined style={{fontSize: '20px'}}/>,
+              icon: <LoginOutlined style={{fontSize: '20px'}}/>,
               label: <Link to='/login'>Login</Link>,
+            },
+            {
+              key: '/conta',
+              icon: <UserOutlined style={{fontSize: '20px'}}/>,
+              label: <Link to='/conta'>Conta</Link>,
             },
             {
               key: '/pedidos',
@@ -89,6 +97,8 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/conta" element={<Conta />} />
+              <Route path="/conta/:id" element={<ContaUpdate />} />
               <Route path="/pedidos" element={<Pedidos/>} />
               <Route path="/carrinho" element={<Carrinho/>} />
               <Route path="/cadastro" element={<Cadastro/>} />
