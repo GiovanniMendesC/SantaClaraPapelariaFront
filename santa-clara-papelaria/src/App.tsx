@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  BarChartOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ShopOutlined,
@@ -11,10 +12,11 @@ import { Link, Route, Routes } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import Home from "./pages/home/HomePage"
-import Login from './pages/login/LoginPage';
+import Login from './pages/registro/login/LoginPage';
 import Pedidos from './pages/pedidos/PedidosPage';
 import Carrinho from './pages/carrinho/CarrinhoPage';
-import Cadastro from './pages/login/CadastroPage';
+import Cadastro from './pages/registro/cadastro/CadastroPage';
+import Relatorios from './pages/relatorios/RelatoriosPage';
 
 const { Header, Sider, Content } = Layout;
 
@@ -54,6 +56,11 @@ const App: React.FC = () => {
               icon: <UploadOutlined style={{fontSize: '20px'}}/>,
               label: <Link to='/pedidos'>Pedidos</Link>,
             },
+            {
+              key: '/relatorios',
+              icon: <BarChartOutlined style={{fontSize: '20px'}}/>,
+              label: <Link to='/relatorios'>Relatórios</Link>,
+            },
           ]}
         />
       </Sider>
@@ -85,6 +92,7 @@ const App: React.FC = () => {
               <Route path="/pedidos" element={<Pedidos/>} />
               <Route path="/carrinho" element={<Carrinho/>} />
               <Route path="/cadastro" element={<Cadastro/>} />
+              <Route path="/relatorios" element={<Relatorios/>} />
             </Routes>
         </Content>
       </Layout>

@@ -1,5 +1,5 @@
 import { Modal } from 'antd';
-import Login from "../login/LoginPage";
+import Login from "../registro/login/LoginPage";
 import { useEffect, useState } from "react";
 import { useAuth } from '../../AuthContext';
 import { useNavigate } from 'react-router-dom';
