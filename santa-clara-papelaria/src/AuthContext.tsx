@@ -61,13 +61,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     
             setIsLoggedIn(true);
             setLoginModalOpen(false);
-            console.log("chegou no final do login")
-            console.log(response.data)
-            console.log(id)
-            console.log(localStorage.getItem('login'))
-            console.log(localStorage.getItem('group'))
-            console.log(localStorage.getItem('id'))
-            console.log(localStorage.getItem('username'))
         }
     }
   };

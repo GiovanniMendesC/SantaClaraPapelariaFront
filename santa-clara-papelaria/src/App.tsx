@@ -20,11 +20,13 @@ import Cadastro from './pages/registro/cadastro/CadastroPage';
 import Relatorios from './pages/relatorios/RelatoriosPage';
 import Conta from './pages/registro/contas/ContaPage';
 import ContaUpdate from './pages/registro/contas/ContaUpdate';
+import { useAuth } from './AuthContext';
 
 const { Header, Sider, Content } = Layout;
 
 const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const {isLoggedIn} = useAuth();
   const location = useLocation();
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -64,11 +66,12 @@ const App: React.FC = () => {
               icon: <UploadOutlined style={{fontSize: '20px'}}/>,
               label: <Link to='/pedidos'>Pedidos</Link>,
             },
-            {
+            ...( isLoggedIn && (localStorage.getItem('group') == 'V') ? [{
               key: '/relatorios',
               icon: <BarChartOutlined style={{fontSize: '20px'}}/>,
               label: <Link to='/relatorios'>Relatórios</Link>,
-            },
+            }]:[]),
+            
           ]}
         />
       </Sider>
