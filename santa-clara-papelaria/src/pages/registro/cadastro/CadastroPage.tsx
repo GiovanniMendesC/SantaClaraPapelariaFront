@@ -1,6 +1,6 @@
 import { Button, Checkbox, Input, message } from "antd";
 
-import { UserOutlined, KeyOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
+import { UserOutlined, KeyOutlined, PhoneOutlined, MailOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ const Cadastro = () =>{
         telefone: '',
         senha: '',
         email: '',
-        cliente_especial: false,
+        cidade: ''
       });
       
       const handleChange = (field: string, value: string | boolean) => {
@@ -26,7 +26,7 @@ const Cadastro = () =>{
                 telefone: form.telefone,
                 senha: form.senha,
                 email: form.email,
-                cliente_especial: form.cliente_especial
+                cidade: form.cidade
             })
             .then((response) => {
               console.log('Cadastro realizado com sucesso:', response.data);
@@ -39,7 +39,7 @@ const Cadastro = () =>{
       }
 
       const isInvalid = () =>{
-        if(form.email.length > 20 || form.telefone.length >= 15){
+        if(form.email.length > 20 || form.telefone.length > 15){
             return true;
         }
         return false;
@@ -85,12 +85,16 @@ const Cadastro = () =>{
                 prefix={<MailOutlined />}
                 required
                 />
-                <Checkbox
-                    checked={form.cliente_especial}
-                    onChange={(e) => handleChange('cliente_especial', e.target.checked)}
-                    >
-                    Usuário Especial
-                </Checkbox>
+                <Input
+                size="large"
+                placeholder="Cidade"
+                maxLength={30}
+                value={form.cidade}
+                onChange={(e) => handleChange('cidade', e.target.value)}
+                prefix={<EnvironmentOutlined />}
+                required
+                />
+                
                 <div style={{display: 'flex', justifyContent: 'space-around'}}>
                     <Button type="primary" htmlType="submit" style={{position: 'relative', width: '100vw'}} disabled={isInvalid()}>
                         Confirmar

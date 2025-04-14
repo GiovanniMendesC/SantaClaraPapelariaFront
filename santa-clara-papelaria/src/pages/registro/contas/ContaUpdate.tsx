@@ -15,13 +15,13 @@ const ContaUpdate: React.FC = () => {
     telefone: string;
     email: string;
     senha: string;
-    cliente_especial: boolean;
+    cidade: string;
   }>({
     nome: '',
     telefone: '',
     email: '',
     senha: '',
-    cliente_especial: false
+    cidade: ''
   });
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const ContaUpdate: React.FC = () => {
         telefone: form?.telefone,
         senha: form?.senha,
         email: form?.email,
-        cliente_especial: form?.cliente_especial
+        cidade: form?.cidade
     }).then(response => {
         if(response.status == 200){
             login(form.telefone, 'C', id || '', form.nome);
@@ -80,7 +80,9 @@ const ContaUpdate: React.FC = () => {
                                     <Input required placeholder='Nova Senha' onChange={(e) => handleChange('senha', e.target.value)} value={form.senha}></Input>
                                 </div>
                                 <br/>
-                                <Checkbox checked={form.cliente_especial} onChange={(e) => handleChange('cliente_especial', e.target.value)}>Cliente Especial</Checkbox>
+                                <div> <Text strong>Cidade: </Text>
+                                    <Input required placeholder='Novo Endereço' onChange={(e) => handleChange('cidade', e.target.value)} value={form.cidade}></Input>
+                                </div>
                                 <br/>
                                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     <Button type="primary" htmlType="submit" disabled={isInvalid()}>Confirmar</Button>

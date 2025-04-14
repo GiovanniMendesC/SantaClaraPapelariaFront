@@ -50,8 +50,11 @@ const Pedidos = () => {
           .catch(error => console.error('Erro ao buscar dados:', error));
       }else if(localStorage.getItem('group')=='C'){
         axios.get('http://127.0.0.1:8000/api/cadastro/clientes/resumo-por-cliente/', {params:{telefone: localStorage.getItem('login')}})
-          .then(response => setDataCliente(response.data))
+          .then(response => {setDataCliente(response.data)
+            console.log(response.data)
+          })
           .catch(error => console.error('Erro ao buscar dados:', error));
+          
       }
     }
   }, [isLoggedIn, setLoginModalOpen]);
