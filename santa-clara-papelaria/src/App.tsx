@@ -4,6 +4,7 @@ import {
   LoginOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  SettingOutlined,
   ShopOutlined,
   UploadOutlined,
   UserOutlined,
@@ -21,6 +22,7 @@ import Relatorios from './pages/relatorios/RelatoriosPage';
 import Conta from './pages/registro/contas/ContaPage';
 import ContaUpdate from './pages/registro/contas/ContaUpdate';
 import { useAuth } from './AuthContext';
+import Admin from './pages/admin/AdminPage';
 
 const { Header, Sider, Content } = Layout;
 
@@ -70,7 +72,12 @@ const App: React.FC = () => {
               key: '/relatorios',
               icon: <BarChartOutlined style={{fontSize: '20px'}}/>,
               label: <Link to='/relatorios'>Relatórios</Link>,
-            }]:[]),
+            },
+            {
+              key: '/admin',
+              icon: <SettingOutlined style={{fontSize: '20px'}}/>,
+              label: <Link to='/admin'>Administração</Link>,
+            },]:[]),
             
           ]}
         />
@@ -106,6 +113,7 @@ const App: React.FC = () => {
               <Route path="/carrinho" element={<Carrinho/>} />
               <Route path="/cadastro" element={<Cadastro/>} />
               <Route path="/relatorios" element={<Relatorios/>} />
+              <Route path="/admin" element={<Admin/>} />
             </Routes>
         </Content>
       </Layout>

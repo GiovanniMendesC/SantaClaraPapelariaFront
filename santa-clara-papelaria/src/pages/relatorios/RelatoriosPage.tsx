@@ -39,7 +39,7 @@ const Relatorios = () => {
             return 'http://127.0.0.1:8000/api/comercial/relatorio/faturamento_csv/'
         case 'estoque':
             return 'http://127.0.0.1:8000/api/comercial/relatorio/alerta_estoque_csv/'
-        case 'vendas':
+        case 'venda':
             return 'http://127.0.0.1:8000/api/comercial/relatorio/vendas_vendedor_csv/'
             default: return ''
     }
@@ -68,6 +68,8 @@ const Relatorios = () => {
         const response = await axios.get(request_url, {
             responseType: "blob",
           });
+          console.log(response)
+          console.log(await response.data.text()); 
           const blob = new Blob([response.data], { type: response.headers["content-type"] });
           
           const url = window.URL.createObjectURL(blob);

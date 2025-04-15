@@ -20,6 +20,11 @@ interface HomeTableProps {
   
     const tableColumns = [
       {
+        title: 'ID',
+        dataIndex: 'cod_produto',
+        align: 'center'
+      },
+      {
         title: 'Nome',
         dataIndex: 'nome',
         render: (text: string) => <a>{text}</a>,
