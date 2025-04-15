@@ -45,6 +45,7 @@ const Conta = () =>{
                         <div>
                             <Text strong>Nome:</Text> {localStorage.getItem('username')}
                         </div>
+                        <br/>
                         <div>
                             <Text strong>Login:</Text> {localStorage.getItem('login')}
                         </div>

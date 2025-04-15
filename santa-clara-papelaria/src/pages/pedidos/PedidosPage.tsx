@@ -39,25 +39,29 @@ const Pedidos = () => {
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    // Abre o modal se não estiver logado
     if (!isLoggedIn) {
       setLoginModalOpen(true);
     } else {
-      setLoginModalOpen(false);  // Fecha o modal se já estiver logado
-      if(localStorage.getItem('group')=='V'){
-          axios.get('http://127.0.0.1:8000/api/cadastro/pedidos/resumo-pedidos/')
-          .then(response => setData(response.data))
-          .catch(error => console.error('Erro ao buscar dados:', error));
-      }else if(localStorage.getItem('group')=='C'){
-        axios.get('http://127.0.0.1:8000/api/cadastro/clientes/resumo-por-cliente/', {params:{telefone: localStorage.getItem('login')}})
-          .then(response => {setDataCliente(response.data)
-            console.log(response.data)
-          })
-          .catch(error => console.error('Erro ao buscar dados:', error));
-          
-      }
+      setLoginModalOpen(false);
+      fetchPedidos();
     }
-  }, [isLoggedIn, setLoginModalOpen]);
+  }, [isLoggedIn]);
+  
+  const fetchPedidos = () => {
+    const group = localStorage.getItem('group');
+    if (group === 'V') {
+      axios.get('http://127.0.0.1:8000/api/cadastro/pedidos/resumo-pedidos/')
+        .then(response => setData(response.data))
+        .catch(error => console.error('Erro ao buscar dados:', error));
+    } else if (group === 'C') {
+      axios.get('http://127.0.0.1:8000/api/cadastro/clientes/resumo-por-cliente/', {
+        params: { telefone: localStorage.getItem('login') }
+      })
+        .then(response => setDataCliente(response.data))
+        .catch(error => console.error('Erro ao buscar dados:', error));
+    }
+  };
+  
 
   const handleCancel = () => {
     setLoginModalOpen(false);
@@ -82,7 +86,7 @@ const Pedidos = () => {
       <h1>Pedidos</h1>
       {isLoggedIn && localStorage.getItem('group') == 'V' && (
         <>
-            <PedidosTable data={data}/>
+            <PedidosTable data={data} onRefresh={fetchPedidos} />
         </>
       )}
       {isLoggedIn && localStorage.getItem('group') == 'C' && (

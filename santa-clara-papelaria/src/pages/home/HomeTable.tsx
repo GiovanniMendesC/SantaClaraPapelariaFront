@@ -15,48 +15,57 @@ interface HomeTableProps {
     onSelectProduto?: (produto: DataType) => void
  }
 
-const columns = (onSelectProduto?: (produto: DataType) => void): TableProps<DataType>['columns'] => [
-    {
+ const HomeTable: React.FC<HomeTableProps> = ({ data, onSelectProduto }) => {
+    const isCliente = localStorage.getItem('group') === 'C';
+  
+    const tableColumns = [
+      {
         title: 'Nome',
         dataIndex: 'nome',
-        render: (text) => <a>{text}</a>,
-    },
-    {
+        render: (text: string) => <a>{text}</a>,
+      },
+      {
         title: 'Preço',
         className: 'column-money',
         dataIndex: 'valor_produto',
         align: 'center',
-    },
-    {
+      },
+      {
         title: 'Estoque',
         dataIndex: 'estoque',
         align: 'center',
-    },
-    {
+      },
+      {
         title: 'Descrição',
         dataIndex: 'desc_produto',
-        align: 'left',    
-    },
-    {
-        title: 'Ações',
-        key: 'acoes',
-        render: (_, record) => (
-        <Button type="primary" onClick={() => onSelectProduto?.(record)}>
-            Adicionar
-        </Button>
-        ),
-    }
-];
-
-const HomeTable: React.FC<HomeTableProps> = ({data, onSelectProduto}) => (
-  <Table<DataType>
-    columns={columns(onSelectProduto)}
-    dataSource={data}
-    bordered
-    title={() => ''}
-    footer={() => ''}
-    rowKey={"cod_produto"}
-  />
-);
+        align: 'left',
+      },
+      ...(isCliente
+        ? [
+            {
+              title: 'Ações',
+              key: 'acoes',
+              render: (_: any, record: DataType) => (
+                <Button type="primary" onClick={() => onSelectProduto?.(record)}>
+                  Adicionar
+                </Button>
+              ),
+            },
+          ]
+        : []),
+    ] as TableProps<DataType>['columns'];
+  
+    return (
+      <Table<DataType>
+        columns={tableColumns}
+        dataSource={data}
+        bordered
+        title={() => ''}
+        footer={() => ''}
+        rowKey="cod_produto"
+      />
+    );
+  };
+  
 
 export default HomeTable;

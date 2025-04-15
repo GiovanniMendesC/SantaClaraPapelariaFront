@@ -2,8 +2,10 @@ import axios from "axios";
 import {Button} from "antd";
 import { useEffect, useState } from "react";
 import HomeTable from "./HomeTable";
-import { ShoppingCartOutlined } from '@ant-design/icons';
-import { Link, useNavigate } from "react-router-dom";
+import { FunnelPlotOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { useNavigate } from "react-router-dom";
+import "./HomePage.css";
+import HomeFilter from "./HomeFilter";
 
 interface DataType {
     cod_produto: number;
@@ -13,20 +15,51 @@ interface DataType {
     desc_produto: string;
   }
 
+interface FiltroType {
+    nome: string | null,
+    preco_min: number | null,
+    preco_max: number | null,
+    fornecido_em_mari: boolean | null,
+    estoque_baixo: boolean | null
+}
 const Home = () => {
     const [data, setData] = useState<DataType[]>([]);
     const [produtosSelecionados, setProdutosSelecionados] = useState<DataType[]>([]);
+    const [filtroModalAberto, setFiltroModalAberto] = useState(false);
+    const [filtro, setFiltro] = useState<FiltroType>({
+        nome: null,
+        preco_min: null,
+        preco_max: null,
+        fornecido_em_mari: null,
+        estoque_baixo: null
+    });
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/cadastro/produtos/')
+        fetchProdutos();    
+    }, [filtro]);
+    
+    const fetchProdutos = () =>{
+        axios.get('http://127.0.0.1:8000/api/cadastro/produtos/filtrar-vendedor/', {
+            params: {
+                nome: filtro.nome,
+                preco_min: filtro.preco_min,
+                preco_max: filtro.preco_max,
+                fornecido_em_mari: filtro.fornecido_em_mari,
+                estoque_baixo: filtro.estoque_baixo
+            }
+        })
         .then(response => setData(response.data))
         .catch(error => console.error('Erro ao buscar dados:', error));
-    }, []);
+    }
 
     const irParaCarrinho = () => {
         const ids = produtosSelecionados.map(p => p.cod_produto).join(',');
         navigate(`/carrinho?produtos=${ids}`);
+    }
+
+    const hasFilter = () =>{
+        return Object.values(filtro).some(v => v !== null && v !== '' && v !== false && v !== 0);
     }
 
     return(
@@ -52,6 +85,33 @@ const Home = () => {
                     <br></br>
                 </div>
             )}
+
+            <br/>
+            <div style={{display: 'flex'}}>
+                    <div style={{marginLeft: 'auto', top: 20, right: 20 }}>
+                        <Button 
+                            size="large" 
+                            type="primary" 
+                            style={{ display: 'flex', alignItems: 'center' }}
+                            onClick={() => setFiltroModalAberto(true)}
+                            >
+                            <FunnelPlotOutlined 
+                                style={{ fontSize: 24, marginRight: 8 }} 
+                                className={hasFilter() ? 'blinking' : ''}
+                            />
+                            Filtros
+                            <br/>
+                        </Button>
+                        <HomeFilter
+                            open={filtroModalAberto}
+                            onClose={() => setFiltroModalAberto(false)}
+                            onApply={(filtros) => setFiltro(filtros)}
+                            initialValues={filtro}
+                        />
+                    </div>
+                    <br/>
+                </div>
+                <br/>
             <HomeTable data={data} onSelectProduto={(produto) => setProdutosSelecionados(prev => [...prev, produto])}/>
         </>
     )
