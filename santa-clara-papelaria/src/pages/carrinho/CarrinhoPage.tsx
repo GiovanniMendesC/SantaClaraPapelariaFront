@@ -143,12 +143,6 @@ const Carrinho = () => {
                                 <Button type="primary" htmlType="submit" disabled={produtosInfo.length == 0}>Confirmar</Button>
                             </div>
                         </form>
-                        <button onClick={() => {
-                            console.log(localStorage.getItem('id'))
-                            console.log(produtosInfo.map(produto => produto.id))
-                            console.log(form.pagamento)
-                            console.log(form.cupom)
-                            }}>clickme</button>
                     </div>
                 </>
             )}

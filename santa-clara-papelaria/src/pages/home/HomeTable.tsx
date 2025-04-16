@@ -16,7 +16,7 @@ interface HomeTableProps {
  }
 
  const HomeTable: React.FC<HomeTableProps> = ({ data, onSelectProduto }) => {
-    const isCliente = localStorage.getItem('group') === 'C';
+    const isSeller = localStorage.getItem('group') === 'V';
   
     const tableColumns = [
       {
@@ -45,7 +45,7 @@ interface HomeTableProps {
         dataIndex: 'desc_produto',
         align: 'left',
       },
-      ...(isCliente
+      ...(!isSeller
         ? [
             {
               title: 'Ações',

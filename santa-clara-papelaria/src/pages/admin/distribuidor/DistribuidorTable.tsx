@@ -2,28 +2,26 @@ import React, { useState } from 'react';
 import { Button, message, Modal, Table } from 'antd';
 import type { TableProps } from 'antd';
 import axios from 'axios';
-import ProdutoAtualizar from './ProdutoAtualizar';
+import DistribuidorAtualizar from './DisrtibuidorAtualizar';
 
-interface DataType {
-  cod_produto: number;
-  nome: string;
-  valor_produto: number;
-  estoque: number;
-  desc_produto: string;
+interface DataType{
+    id_distribuidor: number,
+    nome: string,
+    cnpj: string
 }
 
-interface ProdutosTableProps {
+interface DistribuidorTableProps {
     data: DataType[]; // Dados a serem exibidos na tabela
     onSelectProduto?: (produto: DataType) => void;
     onUpdate: () => void;
  }
 
- const ProdutosTable: React.FC<ProdutosTableProps> = ({ data, onSelectProduto, onUpdate }) => {
-    const [produtoAtualizarModal, setProdutoAtualizarModal] = useState(false);
-    const [produto, setProduto] = useState<DataType>();
+ const DistribuidorTable: React.FC<DistribuidorTableProps> = ({ data, onSelectProduto, onUpdate }) => {
+    const [distribuidorAtualizarModal, setDistribuidorAtualizarModal] = useState(false);
+    const [distribuidor, setDistribuidor] = useState<DataType>();
 
-    const handleDeletar = (cod_produto: number) =>{
-      axios.delete(`http://127.0.0.1:8000/api/cadastro/produtos/${cod_produto}/remover/`)
+    const handleDeletar = (id: number) =>{
+      axios.delete(`http://127.0.0.1:8000/api/cadastro/distribuidores/${id}/remover/`)
       .then(()=>{
         console.log("produto deletado com sucesso!")
         onUpdate();
@@ -34,14 +32,14 @@ interface ProdutosTableProps {
     }
 
     const handleAlterar = (record: DataType) =>{
-      setProduto(record)
-      setProdutoAtualizarModal(true);
+        setDistribuidor(record);
+        setDistribuidorAtualizarModal(true);
     }
   
     const tableColumns = [
       {
         title: 'ID',
-        dataIndex: 'cod_produto',
+        dataIndex: 'id_distribuidor',
         align: 'center'
       },
       {
@@ -50,20 +48,9 @@ interface ProdutosTableProps {
         render: (text: string) => <a>{text}</a>,
       },
       {
-        title: 'Preço',
-        className: 'column-money',
-        dataIndex: 'valor_produto',
+        title: 'CNPJ',
+        dataIndex: 'cnpj',
         align: 'center',
-      },
-      {
-        title: 'Estoque',
-        dataIndex: 'estoque',
-        align: 'center',
-      },
-      {
-        title: 'Descrição',
-        dataIndex: 'desc_produto',
-        align: 'left',
       },
         {
             title: 'Alterar',
@@ -80,7 +67,7 @@ interface ProdutosTableProps {
             key: 'excluir',
             align: 'center',
             render: (_: any, record: DataType) => (
-            <Button type="primary" danger onClick={() => handleDeletar(record.cod_produto)}>
+            <Button type="primary" danger onClick={() => handleDeletar(record.id_distribuidor)}>
                 Excluir
             </Button>
             ),
@@ -95,16 +82,16 @@ interface ProdutosTableProps {
           bordered
           title={() => ''}
           footer={() => ''}
-          rowKey="cod_produto"
+          rowKey="id_distribuidor"
         />
 
         <Modal
-          open={produtoAtualizarModal}
-          onCancel={()=>setProdutoAtualizarModal(false)}
+          open={distribuidorAtualizarModal}
+          onCancel={()=>setDistribuidorAtualizarModal(false)}
           title='Alterar produto'
           footer={null}
         >
-          <ProdutoAtualizar produto={produto} onUpdate={onUpdate} onClose={()=>setProdutoAtualizarModal(false)}/>
+            <DistribuidorAtualizar distribuidor={distribuidor} onUpdate={onUpdate} onClose={()=>setDistribuidorAtualizarModal(false)}/>
         </Modal>
       </>
 
@@ -112,4 +99,4 @@ interface ProdutosTableProps {
   };
   
 
-export default ProdutosTable;
+export default DistribuidorTable;
