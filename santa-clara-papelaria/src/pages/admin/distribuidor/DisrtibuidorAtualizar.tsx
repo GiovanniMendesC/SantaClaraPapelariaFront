@@ -1,6 +1,6 @@
 import { Button, Input, message, Typography } from "antd";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const {Text} = Typography;
 
@@ -23,6 +23,16 @@ const DistribuidorAtualizar = ({distribuidor, onUpdate, onClose}: DistribuidorAt
         id_distribuidor: distribuidor?.id_distribuidor,
         cnpj: distribuidor?.cnpj
     });
+
+    useEffect(() => {
+        if (distribuidor) {
+            setForm({
+                nome: distribuidor.nome,
+                id_distribuidor: distribuidor.id_distribuidor,
+                cnpj: distribuidor.cnpj
+            });
+        }
+    }, [distribuidor]);
 
     const handleChange = (field: keyof DataType, value: string | number) => {
         setForm((prev) => ({ ...prev, [field]: value }));

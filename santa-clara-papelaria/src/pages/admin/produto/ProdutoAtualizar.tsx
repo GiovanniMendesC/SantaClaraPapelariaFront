@@ -1,7 +1,7 @@
 import { Button, Input, message, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const {Text} = Typography;
 
@@ -26,6 +26,17 @@ const ProdutoAtualizar = ({produto, onUpdate, onClose}: ProdutoAtualizarProps) =
         estoque: produto?.estoque,
         desc_produto: produto?.desc_produto
     });
+
+    useEffect(() => {
+        if (produto) {
+            setForm({
+                nome: produto.nome,
+                valor_produto: produto.valor_produto,
+                estoque: produto.estoque,
+                desc_produto: produto.desc_produto
+            });
+        }
+    }, [produto]);
 
     const handleChange = (field: keyof FormData, value: string | number) => {
         setForm((prev) => ({ ...prev, [field]: value }));
