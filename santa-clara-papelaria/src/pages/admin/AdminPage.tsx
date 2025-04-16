@@ -4,7 +4,7 @@ import { useAuth } from "../../AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
 import Login from "../registro/login/LoginPage";
-import Produto from "./produto/ProdutoPage";
+import Produto from "./produto/ProdutosPage";
 import Fornecedor from "./fornecedor/FornecedorPage";
 import Distribuidor from "./distribuidor/DistribuidorPage";
 

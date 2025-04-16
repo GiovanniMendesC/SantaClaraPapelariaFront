@@ -1,21 +1,11 @@
-import { Button, InputNumber, message, Select, Typography } from "antd"
-import axios from "axios"
-import { useEffect, useState } from "react"
+import { Button, Input, message, Select, Typography } from "antd";
+import TextArea from "antd/es/input/TextArea";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 
 const { Option } = Select;
 const { Text } = Typography;
-
-interface FormData {
-    nome_produto: string,
-    nome_fornecedor: string,
-    nome_distribuidor: string,
-    quantidade: number
-}
-
-interface Produto {
-    cod_produto: number,
-    nome: string
-}
 
 interface Fornecedor {
     id_fornecedor: number,
@@ -27,21 +17,31 @@ interface Distribuidor {
     nome: string
 }
 
-interface FornecimentoNovoProps {
-    onClose: () => void;
+interface FormData {
+    nome: string,
+    valor_produto: number,
+    estoque: number,
+    desc_produto: string,
+    nome_fornecedor: string,
+    nome_distribuidor: string
 }
 
-const FornecimentoNovo = ({ onClose }: FornecimentoNovoProps) => {
+interface ProdutoNovoProps {
+    onClose: () => void;
+    onUpdate: () => void;
+}
+const ProdutoNovo = ({ onClose, onUpdate }: ProdutoNovoProps) =>{
     const [isLoading, setIsLoading] = useState(false);
-    const [form, setForm] = useState<FormData>({
-        nome_produto: "",
-        nome_fornecedor: "",
-        nome_distribuidor: "",
-        quantidade: 0
-    });
     const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
-    const [produtos, setProdutos] = useState<Produto[]>([]);
     const [distribuidores, setDistribuidores] = useState<Distribuidor[]>([]);
+    const [form, setForm] = useState<FormData>({
+        nome: '',
+        valor_produto: 0,
+        estoque: 0,
+        desc_produto: '',
+        nome_distribuidor: '',
+        nome_fornecedor: ''
+    });
 
     useEffect(() => {
         fetchData();
@@ -49,53 +49,46 @@ const FornecimentoNovo = ({ onClose }: FornecimentoNovoProps) => {
 
     const fetchData = async () => {
         try {
-            const [resProdutos, resFornecedores, resDistribuidores] = await Promise.all([
-                axios.get('http://localhost:8000/api/cadastro/produtos/listar-nomes/'),
+            const [resFornecedores, resDistribuidores] = await Promise.all([
                 axios.get('http://localhost:8000/api/cadastro/fornecedores/listar-nomes/'),
                 axios.get('http://localhost:8000/api/cadastro/distribuidores/listar-nomes/')
             ]);
 
-            setProdutos(resProdutos.data.produtos || []);
             setFornecedores(resFornecedores.data.fornecedores || []);
             setDistribuidores(resDistribuidores.data.distribuidores || []);
         } catch (err) {
             message.error("Erro ao buscar dados.");
         }
     }
-
+    
     const handleChange = (field: keyof FormData, value: string | number) => {
         setForm((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleCriarFornecimento = async (e: React.FormEvent) => {
+    const handleCriarProduto = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            await axios.post('http://localhost:8000/api/cadastro/produtos/registrar-entrada-estoque/', form);
-            message.success("Fornecimento criado com sucesso!");
+            await axios.post('http://localhost:8000/api/cadastro/produtos/inserir-com-fornecedor/', form);
+            message.success("Produto criado com sucesso!");
             setIsLoading(false);
+            onUpdate();
             onClose();
         } catch (err) {
-            message.error("Erro ao criar fornecimento.");
+            message.error("Erro ao criar produto.");
             setIsLoading(false);
         }
     };
 
     return (
         <>
-            <form onSubmit={handleCriarFornecimento} style={{ maxWidth: 400, margin: "0 auto", display: "flex", flexDirection: "column", gap: '8px' }}>
-                <Text>Produto:</Text>
-                <Select
-                    placeholder="Selecione o produto"
-                    onChange={(value) => handleChange("nome_produto", value)}
-                >
-                    {produtos.map((p) => (
-                        <Option key={p.cod_produto} value={p.nome}>
-                            {p.nome}
-                        </Option>
-                    ))}
-                </Select>
-
+            <form onSubmit={handleCriarProduto} style={{ maxWidth: 400, margin: "0 auto", display: "flex", flexDirection: "column", gap: '8px' }}>
+                <Text>Nome do produto:</Text>
+                <Input required placeholder="Nome do produto" value={form.nome} onChange={(e) => handleChange("nome", e.target.value)}></Input>
+                <Text>Valor do produto:</Text>
+                <Input required placeholder="Valor do produto" type="number" value={form.valor_produto} onChange={(e) => handleChange("valor_produto", parseFloat(e.target.value))}></Input>
+                <Text>Quantidade em estoque:</Text>
+                <Input required placeholder="Quantidade em estoque" type="number" value={form.estoque} onChange={(e) => handleChange("estoque", parseInt(e.target.value))}></Input>
                 <Text>Fornecedor:</Text>
                 <Select
                     placeholder="Selecione o fornecedor"
@@ -119,20 +112,18 @@ const FornecimentoNovo = ({ onClose }: FornecimentoNovoProps) => {
                         </Option>
                     ))}
                 </Select>
-
-                <Text>Quantidade:</Text>
-                <InputNumber
-                    min={1}
-                    style={{ width: "100%" }}
-                    onChange={(value) => handleChange("quantidade", value || 0)}
+                <Text>Descrição:</Text>
+                <TextArea  
+                    value={form.desc_produto}
+                    onChange={(e) => handleChange("desc_produto", e.target.value)}
                 />
-
+                <br/>
                 <Button htmlType="submit" type="primary" loading={isLoading}>
                     Confirmar
                 </Button>
             </form>
         </>
-    )
+    );
 }
 
-export default FornecimentoNovo;
+export default ProdutoNovo;
