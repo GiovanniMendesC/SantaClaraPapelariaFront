@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Card, Checkbox, Input, Typography } from 'antd';
+import { Button, Card, Input, notification, Typography } from 'antd';
 import axios from 'axios';
 import { useAuth } from '../../../AuthContext';
 
 const { Text } = Typography;
 
 const ContaUpdate: React.FC = () => {
+  const [api, contextHolder] = notification.useNotification();
+  const [isLoading, setIsLoading] = useState(false);
   const {login} = useAuth();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -24,6 +26,10 @@ const ContaUpdate: React.FC = () => {
     cidade: ''
   });
 
+  const regexTelefone = /^\(?\d{2}\)?[\s-]?9\d{4}[-\s]?\d{4}$/;
+
+  const telefoneValido = regexTelefone.test(form.telefone);
+
   useEffect(() => {
     axios.get(`http://127.0.0.1:8000/api/cadastro/clientes/${id}/exibir/`)
     .then(response => { setForm(response.data)})
@@ -32,7 +38,7 @@ const ContaUpdate: React.FC = () => {
 
   const handleUpdate = (event: React.FormEvent) =>{
     event.preventDefault();
-
+    setIsLoading(true);
     axios.put(`http://127.0.0.1:8000/api/cadastro/clientes/${id}/alterar/`,{
         nome: form?.nome,
         telefone: form?.telefone,
@@ -45,6 +51,11 @@ const ContaUpdate: React.FC = () => {
             navigate('/conta')
 
     }})
+    .catch(error =>{
+      console.log('erro ao atualizar dados', error);
+      openNotification();
+      setIsLoading(false);
+    })
 
   }
   const handleChange = (field: string, value: string) => {
@@ -52,40 +63,94 @@ const ContaUpdate: React.FC = () => {
   };
 
   const isInvalid = () => {
-    return form.email.length > 20 || form.telefone.length > 15;
+    return form.email.length > 20 || form.telefone.length > 15 || !telefoneValido;
+  };
+
+  const formatarTelefone = (valor: string) => {
+    const numeros = valor.replace(/\D/g, ''); // remove tudo que não for número
+
+    let resultado = '';
+
+    if (numeros.length > 0) resultado += '(' + numeros.slice(0, 2);
+    if (numeros.length >= 3) resultado += ') ' + numeros.slice(2, 3);
+    if (numeros.length >= 4) resultado += numeros.slice(3, 7);
+    if (numeros.length >= 8) resultado += '-' + numeros.slice(7, 11);
+
+    return resultado;
+  };
+
+  const openNotification = () => {
+    api.error({
+      message: 'Erro ao atualizar dados.',
+      description:
+        'Algo deu errado. Entre em contato com o suporte.',
+      duration: 3,
+    });
   };
 
   return (
     <>
         {localStorage.getItem('group')=='C' && (
             <div>
-                <h1>Alterar Dados</h1>
+                {contextHolder}
+                <h1 className="fw-bold">Alterar Dados</h1>
                 <Card title={`Informações da conta`}>
                     {form && (
                         <>
-                            <form onSubmit={handleUpdate}>
-                                <div> <Text strong>Nome: </Text>
-                                    <Input required placeholder='Novo nome' onChange={(e) => handleChange('nome', e.target.value)} value={form.nome}></Input>
+                            <form className="fs-5" onSubmit={handleUpdate}>
+                                <div className='text-hover-primary'> <Text className="fs-6" strong>Nome: </Text>
+                                    <Input 
+                                      className='fw-semibold fs-5' 
+                                      required placeholder='Novo nome' 
+                                      onChange={(e) => handleChange('nome', e.target.value)} 
+                                      value={form.nome}>
+                                    </Input>
                                 </div>
                                 <br/> 
-                                <div> <Text strong>Telefone: </Text>
-                                    <Input required maxLength={15} placeholder='Novo Telefone' onChange={(e) => handleChange('telefone', e.target.value)} value={form.telefone}></Input>
+                                <div> <Text className="fs-6" strong>Telefone: </Text>
+                                    <Input 
+                                      className='fw-semibold fs-5' 
+                                      required maxLength={15} 
+                                      placeholder='Novo Telefone' 
+                                      status={form.telefone && !telefoneValido ? 'error' : ''}
+                                      onChange={(e) => handleChange('telefone', formatarTelefone(e.target.value))} 
+                                      value={form.telefone}>
+                                    </Input>
                                 </div>
                                 <br/>
-                                <div> <Text strong>Email: </Text>
-                                    <Input required maxLength={20} placeholder='Novo Email' onChange={(e) => handleChange('email', e.target.value)} value={form.email}></Input>
+                                <div> <Text className="fs-6" strong>Email: </Text>
+                                    <Input 
+                                      className='fw-semibold fs-5' 
+                                      required maxLength={20} 
+                                      placeholder='Novo Email' 
+                                      onChange={(e) => handleChange('email', e.target.value)} 
+                                      value={form.email}>
+                                    </Input>
                                 </div>
                                 <br/>
-                                <div> <Text strong>Senha: </Text>
-                                    <Input required placeholder='Nova Senha' onChange={(e) => handleChange('senha', e.target.value)} value={form.senha}></Input>
+                                <div> <Text className="fs-6" strong>Senha: </Text>
+                                    <Input 
+                                      className='fw-semibold fs-5' 
+                                      required placeholder='Nova Senha' 
+                                      onChange={(e) => handleChange('senha', e.target.value)} 
+                                      value={form.senha}>
+                                    </Input>
                                 </div>
                                 <br/>
-                                <div> <Text strong>Cidade: </Text>
-                                    <Input required placeholder='Novo Endereço' onChange={(e) => handleChange('cidade', e.target.value)} value={form.cidade}></Input>
+                                <div> <Text className="fs-6" strong>Cidade: </Text>
+                                    <Input 
+                                      className='fw-semibold fs-5' 
+                                      required placeholder='Novo Endereço' 
+                                      onChange={(e) => handleChange('cidade', e.target.value)} 
+                                      value={form.cidade}>
+                                    </Input>
                                 </div>
                                 <br/>
-                                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <Button type="primary" htmlType="submit" disabled={isInvalid()}>Confirmar</Button>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end' }} className='gap-4'>
+                                  <Button className="fs-5" type="primary" danger onClick={() => navigate('/conta')}>
+                                      Cancelar
+                                  </Button>
+                                  <Button className="fs-5" type="primary" htmlType="submit" disabled={isInvalid()} loading={isLoading}>Confirmar</Button>
                                 </div>
                             </form>
                         </>

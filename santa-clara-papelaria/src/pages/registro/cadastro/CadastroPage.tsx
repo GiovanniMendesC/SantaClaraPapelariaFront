@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input, message } from "antd";
+import { Button, Checkbox, Input, message, notification } from "antd";
 
 import { UserOutlined, KeyOutlined, PhoneOutlined, MailOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import { useState } from "react";
@@ -6,6 +6,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Cadastro = () =>{
+    const [api, contextHolder] = notification.useNotification();
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [form, setForm] = useState({
         nome: '',
@@ -21,6 +23,7 @@ const Cadastro = () =>{
 
       const handleCadastro = (event: React.FormEvent<HTMLFormElement>) =>{
         event.preventDefault();
+        setIsLoading(true);
             axios.post('http://127.0.0.1:8000/api/cadastro/clientes/cadastrar/', {
                 nome: form.nome,
                 telefone: form.telefone,
@@ -32,11 +35,24 @@ const Cadastro = () =>{
               console.log('Cadastro realizado com sucesso:', response.data);
               message.success('Cadastro realizado com sucesso!')
                 navigate('/login');
+                setIsLoading(false);
+              
             })
             .catch((error) => {
               console.error('Erro ao cadastrar:', error);
+              openNotification();
+              setIsLoading(false);
             });
       }
+
+      const openNotification = () => {
+        api.error({
+          message: 'Erro ao cadastrar cliente.',
+          description:
+            'Número de telefone já cadastrado.',
+          duration: 3,
+        });
+      };
 
       const isInvalid = () =>{
         if(form.email.length > 20 || form.telefone.length > 15){
@@ -47,59 +63,60 @@ const Cadastro = () =>{
       
     return(
         <>
+            {contextHolder}
             <h1>Cadastro</h1>
             <div style={{display:'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
                 <h2>Preencha com suas informações</h2>
                 <form onSubmit={handleCadastro} style={{ width: '60%', display: 'flex', flexDirection: 'column', gap: '20px', position:'relative', maxWidth: '30vw'}}>
-                <Input
-                size="large"
-                placeholder="Nome"
-                value={form.nome}
-                onChange={(e) => handleChange('nome', e.target.value)}
-                prefix={<UserOutlined />}
-                required
-                />
-                <Input
-                size="large"
-                placeholder="Telefone"
-                maxLength={15}
-                value={form.telefone}
-                onChange={(e) => handleChange('telefone', e.target.value)}
-                prefix={<PhoneOutlined />}
-                required
-                />
-                <Input.Password
-                size="large"
-                placeholder="Senha"
-                value={form.senha}
-                onChange={(e) => handleChange('senha', e.target.value)}
-                prefix={<KeyOutlined />}
-                required
-                />
-                <Input
-                size="large"
-                placeholder="Email"
-                maxLength={20}
-                value={form.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                prefix={<MailOutlined />}
-                required
-                />
-                <Input
-                size="large"
-                placeholder="Cidade"
-                maxLength={30}
-                value={form.cidade}
-                onChange={(e) => handleChange('cidade', e.target.value)}
-                prefix={<EnvironmentOutlined />}
-                required
-                />
-                
-                <div style={{display: 'flex', justifyContent: 'space-around'}}>
-                    <Button type="primary" htmlType="submit" style={{position: 'relative', width: '100vw'}} disabled={isInvalid()}>
-                        Confirmar
-                    </Button>
-                </div>
+                  <Input
+                  size="large"
+                  placeholder="Nome"
+                  value={form.nome}
+                  onChange={(e) => handleChange('nome', e.target.value)}
+                  prefix={<UserOutlined />}
+                  required
+                  />
+                  <Input
+                  size="large"
+                  placeholder="Telefone"
+                  maxLength={15}
+                  value={form.telefone}
+                  onChange={(e) => handleChange('telefone', e.target.value)}
+                  prefix={<PhoneOutlined />}
+                  required
+                  />
+                  <Input.Password
+                  size="large"
+                  placeholder="Senha"
+                  value={form.senha}
+                  onChange={(e) => handleChange('senha', e.target.value)}
+                  prefix={<KeyOutlined />}
+                  required
+                  />
+                  <Input
+                  size="large"
+                  placeholder="Email"
+                  maxLength={20}
+                  value={form.email}
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  prefix={<MailOutlined />}
+                  required
+                  />
+                  <Input
+                  size="large"
+                  placeholder="Cidade"
+                  maxLength={30}
+                  value={form.cidade}
+                  onChange={(e) => handleChange('cidade', e.target.value)}
+                  prefix={<EnvironmentOutlined />}
+                  required
+                  />
+                  
+                  <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                      <Button type="primary" htmlType="submit" style={{position: 'relative', width: '100vw'}} disabled={isInvalid()} loading={isLoading}>
+                          Confirmar
+                      </Button>
+                  </div>
                 </form>
             </div>
         </>

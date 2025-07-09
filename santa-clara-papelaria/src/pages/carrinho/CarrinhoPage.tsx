@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../AuthContext";
-import { Button, Modal, Select, Typography } from "antd";
+import { Button, Modal, notification, Select, Typography } from "antd";
 import Login from "../registro/login/LoginPage";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -9,6 +9,8 @@ import CarrinhoTable from "./CarrinhoTable";
 const {Text} = Typography;
 
 const Carrinho = () => {
+    const [api, contextHolder] = notification.useNotification();
+    const [isLoading, setIsLoading] = useState(false);
     const { isLoggedIn, loginModalOpen, setLoginModalOpen } = useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -72,6 +74,7 @@ const Carrinho = () => {
     }, [idproduto]);
 
     const handlePurchase = () =>{
+        setIsLoading(true);
         axios.post('http://127.0.0.1:8000/api/comercial/itens-pedido/criar_pedido_com_itens/', {
             idcliente: [localStorage.getItem('id')],
             idproduto: produtosInfo.map(produto => produto.id),
@@ -80,9 +83,12 @@ const Carrinho = () => {
         })
         .then(response => {
             console.log('Pedido realizado com sucesso!', response.data);
+            setIsLoading(false);
             navigate('/pedidos');
         })
         .catch(error => {
+            setIsLoading(false);
+            openNotification();
             console.error('Erro ao criar pedido:', error);
         });
     }
@@ -93,9 +99,21 @@ const Carrinho = () => {
         );
     };
 
+    const openNotification = () => {
+        api.error({
+          message: 'Erro ao criar pedido.',
+          description:
+            'Algo deu errado na realização do pedido. Entre em contato com o suporte.',
+          duration: 3,
+        });
+    };
+
     return (
         <>
-            <h1>Carrinho</h1>
+            {contextHolder}
+            <div className="d-flex justify-content-between">
+                <h1 className="fw-bold">Carrinho</h1>
+            </div>
             <Modal
                 open={loginModalOpen}
                 onCancel={handleCancel}
@@ -108,10 +126,11 @@ const Carrinho = () => {
             {isLoggedIn && (
                 <>
                     <div>
-                        <h2>Pedidos</h2>
+                        <h2 className="fw-semibold">Pedidos</h2>
                         <div>
                             <CarrinhoTable data={produtosInfo} onSelectProduto={handleRemoveProduto}/>
                         </div>
+                        <h2 className="fw-semibold">Pagamento</h2>
                         <form onSubmit={(e) => { e.preventDefault(); handlePurchase(); }}>
                             <Text strong style={{fontSize: '15px'}}>Informe a Forma de Pagamento: </Text>
                             <Select
@@ -139,8 +158,11 @@ const Carrinho = () => {
                                 <Select.Option value="flamengo">Flamengo</Select.Option>
                                 <Select.Option value="onepiece">One Piece</Select.Option>
                             </Select>
-                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                <Button type="primary" htmlType="submit" disabled={produtosInfo.length == 0}>Confirmar</Button>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end' }} className="gap-4">
+                                <Button className="fs-5" type="primary" danger onClick={() => navigate('/')}>
+                                    Cancelar
+                                </Button>
+                                <Button className="fs-5" type="primary" htmlType="submit" loading={isLoading} disabled={produtosInfo.length == 0}>Confirmar</Button>
                             </div>
                         </form>
                     </div>

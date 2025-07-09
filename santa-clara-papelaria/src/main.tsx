@@ -8,12 +8,11 @@ import { AuthProvider } from './AuthContext.tsx'
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <StrictMode>
-      
     <AuthProvider>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </AuthProvider>
-    </StrictMode>,
+    </StrictMode>
   </React.StrictMode>
 )

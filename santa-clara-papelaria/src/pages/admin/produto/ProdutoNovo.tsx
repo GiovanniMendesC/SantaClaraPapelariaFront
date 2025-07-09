@@ -1,4 +1,4 @@
-import { Button, Input, message, Select, Typography } from "antd";
+import { Button, Input, message, notification, Select, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -31,6 +31,7 @@ interface ProdutoNovoProps {
     onUpdate: () => void;
 }
 const ProdutoNovo = ({ onClose, onUpdate }: ProdutoNovoProps) =>{
+    const [api, contextHolder] = notification.useNotification();
     const [isLoading, setIsLoading] = useState(false);
     const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
     const [distribuidores, setDistribuidores] = useState<Distribuidor[]>([]);
@@ -77,11 +78,23 @@ const ProdutoNovo = ({ onClose, onUpdate }: ProdutoNovoProps) =>{
         } catch (err) {
             message.error("Erro ao criar produto.");
             setIsLoading(false);
+            openNotification();
         }
     };
 
+    const openNotification = () => {
+        api.error({
+          message: 'Erro ao criar produto.',
+          description:
+            'Produto já existente.',
+          duration: 3,
+        });
+    };
+
+
     return (
         <>
+            {contextHolder}
             <form onSubmit={handleCriarProduto} style={{ maxWidth: 400, margin: "0 auto", display: "flex", flexDirection: "column", gap: '8px' }}>
                 <Text>Nome do produto:</Text>
                 <Input required placeholder="Nome do produto" value={form.nome} onChange={(e) => handleChange("nome", e.target.value)}></Input>

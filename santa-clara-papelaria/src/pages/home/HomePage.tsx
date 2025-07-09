@@ -64,54 +64,54 @@ const Home = () => {
 
     return(
         <>
-            <div>
-                <h1>Produtos</h1>
-            </div>
-            {produtosSelecionados.length > 0 && (
+            <div className="d-flex flex-row w-100 justify-content-between align-items-center mb-5">
+                <h1 className="fw-bold">Produtos</h1>
+                <div className="d-flex flex-row gap-4">
+                    {produtosSelecionados.length > 0 && (
+                        <div style={{display: 'flex'}}>
+                            <div style={{marginLeft: 'auto', top: 20, right: 20 }}>
+                                <Button 
+                                    size="large" 
+                                    type="primary" 
+                                    style={{ display: 'flex', alignItems: 'center' }}
+                                    onClick={irParaCarrinho} // aqui troca o Link pelo botão com onClick
+                                    className="fs-5"
+                                >
+                                    <ShoppingCartOutlined className="fs-3" />
+                                    Carrinho
+                                    <br/>
+                                    <span>{produtosSelecionados.length}</span>
+                                </Button>
+                            </div>
+                            <br></br>
+                        </div>
+                    )}
                 <div style={{display: 'flex'}}>
-                    <div style={{marginLeft: 'auto', top: 20, right: 20 }}>
-                        <Button 
-                            size="large" 
-                            type="primary" 
-                            style={{ display: 'flex', alignItems: 'center' }}
-                            onClick={irParaCarrinho} // aqui troca o Link pelo botão com onClick
-                        >
-                            <ShoppingCartOutlined style={{ fontSize: 24, marginRight: 8 }} />
-                            Carrinho
-                            <br/>
-                            <span>{produtosSelecionados.length}</span>
-                        </Button>
-                    </div>
-                    <br></br>
-                </div>
-            )}
-
-            <br/>
-            <div style={{display: 'flex'}}>
-                    <div style={{marginLeft: 'auto', top: 20, right: 20 }}>
-                        <Button 
-                            size="large" 
-                            type="primary" 
-                            style={{ display: 'flex', alignItems: 'center' }}
-                            onClick={() => setFiltroModalAberto(true)}
-                            >
-                            <FunnelPlotOutlined 
-                                style={{ fontSize: 24, marginRight: 8 }} 
-                                className={hasFilter() ? 'blinking' : ''}
+                        <div style={{marginLeft: 'auto', top: 20, right: 20 }}>
+                            <Button 
+                                size="large" 
+                                type="primary" 
+                                style={{ display: 'flex', alignItems: 'center' }}
+                                onClick={() => setFiltroModalAberto(true)}
+                                className="fs-5"
+                                >
+                                <FunnelPlotOutlined 
+                                    className={`fs-3 ${hasFilter() ? 'blinking' : ''}`}
+                                />
+                                Filtros
+                                <br/>
+                            </Button>
+                            <HomeFilter
+                                open={filtroModalAberto}
+                                onClose={() => setFiltroModalAberto(false)}
+                                onApply={(filtros) => setFiltro(filtros)}
+                                initialValues={filtro}
                             />
-                            Filtros
-                            <br/>
-                        </Button>
-                        <HomeFilter
-                            open={filtroModalAberto}
-                            onClose={() => setFiltroModalAberto(false)}
-                            onApply={(filtros) => setFiltro(filtros)}
-                            initialValues={filtro}
-                        />
-                    </div>
-                    <br/>
+                        </div>
                 </div>
-                <br/>
+                </div>
+            </div>
+
             <HomeTable data={data} onSelectProduto={(produto) => setProdutosSelecionados(prev => [...prev, produto])}/>
         </>
     )

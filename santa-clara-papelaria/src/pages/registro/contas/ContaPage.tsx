@@ -37,24 +37,24 @@ const Conta = () =>{
             >
                 <Login />
             </Modal>
-            <h1>Conta</h1>
+            <h1 className="fw-bold">Conta</h1>
             
             {isLoggedIn && (
                 <>
-                    <Card title='Informações da conta'>
-                        <div>
-                            <Text strong>Nome:</Text> {localStorage.getItem('username')}
+                    <Card className="fs-5 fw-bold"  title='Informações da conta'>
+                        <div className="text-hover-primary">
+                            <Text  className="fs-6 fw-bold" strong>Nome:</Text> {localStorage.getItem('username')}
                         </div>
                         <br/>
-                        <div>
-                            <Text strong>Login:</Text> {localStorage.getItem('login')}
+                        <div className="text-hover-primary">
+                            <Text className="fs-6 fw-bold" strong>Login:</Text> {localStorage.getItem('login')}
                         </div>
                         <br/>
                         <br/>
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             {localStorage.getItem('group') == 'C' && (
                                 <Link to={`/conta/${localStorage.getItem('id')}`}>
-                                    <Button type="primary">Alterar Dados</Button>
+                                    <Button className="fs-5" type="primary">Alterar Dados</Button>
                                 </Link>
                             )}
                         </div> 

@@ -1,4 +1,4 @@
-import { Modal, Input, Checkbox, InputNumber, Form, Button } from "antd";
+import { Modal, Input, InputNumber, Form, Button, Switch } from "antd";
 import { useEffect } from "react";
 import { useAuth } from "../../AuthContext";
 
@@ -44,10 +44,10 @@ const HomeFilter = ({ open, onClose, onApply, initialValues }: Props) => {
       open={open}
       onCancel={onClose}
       footer={[
-        <Button key="limpar" danger type="primary" onClick={handleClear}>
+        <Button key="limpar" danger type="primary" onClick={handleClear} className="fs-5">
           Limpar
         </Button>,
-        <Button key="aplicar" type="primary" onClick={handleOk}>
+        <Button key="aplicar" type="primary" onClick={handleOk} className="fs-5">
           Aplicar
         </Button>,
       ]}
@@ -62,12 +62,12 @@ const HomeFilter = ({ open, onClose, onApply, initialValues }: Props) => {
         <Form.Item label="Preço máximo" name="preco_max">
           <InputNumber style={{ width: "100%" }} />
         </Form.Item>
-        <Form.Item name="fornecido_em_mari" valuePropName="checked">
-          <Checkbox>Fornecido em Mari</Checkbox>
+        <Form.Item label='Fornecido em Mari' name="fornecido_em_mari" valuePropName="checked">
+          <Switch/>
         </Form.Item>
         {isLoggedIn && localStorage.getItem('group') == 'V' && (
-            <Form.Item name="estoque_baixo" valuePropName="checked">
-                <Checkbox>Estoque baixo</Checkbox>
+            <Form.Item label='Estoque Baixo' name="estoque_baixo" valuePropName="checked">
+                <Switch/>
             </Form.Item>
         )}
       </Form>

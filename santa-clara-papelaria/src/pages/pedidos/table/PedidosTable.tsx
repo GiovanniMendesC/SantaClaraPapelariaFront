@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Dropdown, Modal, Space, Table } from 'antd';
+import { Button, Dropdown, Modal, notification, Space, Table } from 'antd';
 import type { MenuProps, TableProps } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import axios from 'axios';
@@ -28,6 +28,7 @@ interface PedidosTableProps {
 
 
 const PedidosTable: React.FC<PedidosTableProps> = ({data, onSelectProduto, onRefresh}) => {
+    const [api, contextHolder] = notification.useNotification();
     const [selectedPedido, setSelectedPedido] = useState<DataType | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -45,8 +46,6 @@ const PedidosTable: React.FC<PedidosTableProps> = ({data, onSelectProduto, onRef
     };
 
     const handlePayment = (pedido: DataType, status: string) => {
-        console.log(pedido.id_pedido)
-        console.log(status)
         axios.post('http://127.0.0.1:8000/api/comercial/pagamentos/atualizar_status/', {
             id_pedido: pedido.id_pedido,
             status: status,
@@ -57,7 +56,16 @@ const PedidosTable: React.FC<PedidosTableProps> = ({data, onSelectProduto, onRef
             onRefresh?.(); // << chama a função do componente pai
         })
         .catch((error) => {
+            openNotification(error.response.data.erro)
             console.error('Erro ao atualizar pagamento:', error);
+        });
+    };
+
+    const openNotification = (message: string) => {
+        api.open({
+          message: 'Erro ao confirmar pedido.',
+          description: message,
+          duration: 0,
         });
     };
 
@@ -155,6 +163,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({data, onSelectProduto, onRef
       
     return (
         <>
+            {contextHolder}
             <Table<DataType>
                 columns={columns()}
                 dataSource={data}

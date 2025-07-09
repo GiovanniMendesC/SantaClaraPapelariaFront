@@ -10,6 +10,8 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 import { Link, Route, Routes } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
@@ -37,8 +39,19 @@ const App: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: '100vh'}}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
+      <Sider trigger={null} collapsible collapsed={collapsed} width={230}
+      >
+        <div className='p-2 ms-2 text-white d-flex flex-row justify-content-start align-itmes-center'>
+          <img src='/logo.svg' width={50}></img>
+          {!collapsed &&
+            <div className='p-1 ms-2 cell-nowrap text-white fw-semibold d-flex flex-column fs-4 justify-content-center align-items-start'>
+              <span>Santa Clara</span>
+              <span className='fs-6'>Papelaria</span>
+            </div>
+          }
+        </div>
+        <div className="demo-logo-vertical mt-1" />
+        {/* <img src='/logo.svg'width={50} height={50} className=''></img> */}
         <Menu
           theme="dark"
           mode="inline"
@@ -77,12 +90,12 @@ const App: React.FC = () => {
               key: '/admin',
               icon: <SettingOutlined style={{fontSize: '20px'}}/>,
               label: <Link to='/admin'>Administração</Link>,
-            },]:[]),
+            }]:[])
             
           ]}
         />
       </Sider>
-      <Layout>
+      <Layout style={{height: '100vh'}}>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Button
             type="text"
@@ -102,6 +115,8 @@ const App: React.FC = () => {
             minHeight: 280,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
+            overflowY: 'auto',
+            overflowX: 'auto'
           }}
         >
             <Routes>

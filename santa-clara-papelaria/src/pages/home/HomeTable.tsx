@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Table } from 'antd';
 import type { TableProps } from 'antd';
 
+import './HomePage.css';
+
 interface DataType {
   cod_produto: number;
   nome: string;
@@ -22,28 +24,32 @@ interface HomeTableProps {
       {
         title: 'ID',
         dataIndex: 'cod_produto',
-        align: 'center'
+        align: 'center',
+        render: (text: string) => <span className='fs-6 fw-bold text-muted'>{text ?? '-'}</span>,
       },
       {
         title: 'Nome',
         dataIndex: 'nome',
-        render: (text: string) => <a>{text}</a>,
+        render: (text: string) => <span className='text-hover-primary fs-6 fw-bold'>{text ?? '-'}</span>,
       },
       {
         title: 'Preço',
         className: 'column-money',
         dataIndex: 'valor_produto',
         align: 'center',
+        render: (text: string) => <span className='badge text-bg-primary fs-6'>{text ?? '-'}</span>,
       },
       {
         title: 'Estoque',
         dataIndex: 'estoque',
         align: 'center',
+        render: (text: string) => <span className='badge text-bg-secondary fs-6'>{text ?? '-'}</span>,
       },
       {
         title: 'Descrição',
         dataIndex: 'desc_produto',
         align: 'left',
+        render: (text: string) => <span className='fs-6 text-muted fw-bold'>{text ?? '-'}</span>,
       },
       ...(!isSeller
         ? [
@@ -68,6 +74,7 @@ interface HomeTableProps {
         title={() => ''}
         footer={() => ''}
         rowKey="cod_produto"
+        className='overflow-auto'
       />
     );
   };

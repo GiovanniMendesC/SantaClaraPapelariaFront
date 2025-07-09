@@ -21,11 +21,12 @@ const CarrinhoTable: React.FC<CarrinhoTableProps> = ({data, onSelectProduto}) =>
         {
             title: 'Produto',
             dataIndex: 'nome',
-            render: (text) => <a>{text}</a>,
+            render: (text) => <span className='fw-bold text-hover-primary fs-6'>{text}</span>,
         },
         {
             title: 'Preço',
             dataIndex: 'valor_produto',
+            render: (text) => <span className='badge bg-primary fs-6'>{text}</span>,
         },
         {
             title: 'Ações',

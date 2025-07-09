@@ -43,24 +43,30 @@ const PedidosClienteTable: React.FC<PedidosClienteTableProps> = ({ data }) => {
             {
               title: 'ID Pedido',
               dataIndex: 'id_pedido',
+              render: (text) => <span className='fw-bold fs-6 text-muted'>{text}</span>,
             },
             {
               title: 'Valor Total',
               dataIndex: 'valor_total',
+              align: 'center',
+              render: (text) => <span className='fw-bold fs-6 text-hover-primary'>R${text}</span>,
             },
             {
               title: 'Status do Pagamento',
               dataIndex: 'status_pagamento',
               align: 'center',
+              render: (text) => <span className={`fs-6 badge fw-semibold ${text == 'pendente'? ' text-bg-warning':' text-bg-success'}`}>{text}</span>,
             },
             {
               title: 'Forma de Pagamento',
               dataIndex: 'forma_pagamento',
               align: 'center',
+              render: (text) => <span className='fs-6 fw-semibold'>{text}</span>,
             },
             {
                 title: 'Produtos',
                 key: 'acoes',
+                align: 'center',
                 render: (_, record) => (
                     <Button type="primary" onClick={() => showModal(record)}>
                     Ver Produtos
