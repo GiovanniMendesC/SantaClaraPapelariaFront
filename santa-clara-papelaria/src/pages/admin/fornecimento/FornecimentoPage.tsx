@@ -4,6 +4,8 @@ import FornecimentoNovo from "./FornecimentoNovo";
 import axios from "axios";
 import FornecimentoTable from "./FornecimentoTable";
 
+import {  PlusOutlined } from '@ant-design/icons';
+
 interface DataType{
     id_fornecimento: number,
     nome: string,
@@ -35,11 +37,12 @@ const Fornecimento = () =>{
                 <FornecimentoNovo onClose={() => setForncimentoModalOpen(false)}/>
             </Modal>
 
-            <Card title='Fornecimento'>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button type="primary" onClick={()=>setForncimentoModalOpen(true)}>Adicionar Fornecimento</Button>
+            <Card title={
+                <div className="d-flex justify-content-between">
+                    <h4 className="fw-bold">Fornecimento</h4>
+                    <Button className="fs-5" type="primary" onClick={()=>setForncimentoModalOpen(true)}><PlusOutlined />Adicionar Fornecimento</Button>
                 </div>
-                <br/>
+            } className="shadow-sm">
                 <FornecimentoTable data={data}/>
             </Card>
         </>

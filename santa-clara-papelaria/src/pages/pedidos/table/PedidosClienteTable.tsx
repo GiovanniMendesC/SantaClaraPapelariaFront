@@ -55,7 +55,22 @@ const PedidosClienteTable: React.FC<PedidosClienteTableProps> = ({ data }) => {
               title: 'Status do Pagamento',
               dataIndex: 'status_pagamento',
               align: 'center',
-              render: (text) => <span className={`fs-6 badge fw-semibold ${text == 'pendente'? ' text-bg-warning':' text-bg-success'}`}>{text}</span>,
+              render: (_, record) => {
+                  const status = record.status_pagamento;
+                  let color = '';
+                  switch (status){
+                      case 'confirmado': color = 'success'
+                      break
+                      case 'pendente': color = 'warning'
+                      break
+                      case 'recusado': color = 'danger'
+                  }
+                  return (
+                      <span className={`fs-6 fw-bold badge text-bg-${color}`}>
+                          {status.charAt(0).toUpperCase() + status.slice(1)}
+                      </span>
+                  );
+              },
             },
             {
               title: 'Forma de Pagamento',

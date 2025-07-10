@@ -37,7 +37,7 @@ const Conta = () =>{
             >
                 <Login />
             </Modal>
-            <h1 className="fw-bold">Conta</h1>
+            <h1 className="fw-bold mb-5">Conta</h1>
             
             {isLoggedIn && (
                 <>

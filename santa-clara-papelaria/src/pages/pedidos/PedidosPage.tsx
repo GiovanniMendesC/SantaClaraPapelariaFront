@@ -83,7 +83,7 @@ const Pedidos = () => {
       </Modal>
 
       {/* Seu conteúdo da página */}
-      <h1 className='fw-bold'>Pedidos</h1>
+      <h1 className='fw-bold mb-5'>Pedidos</h1>
       {isLoggedIn && localStorage.getItem('group') == 'V' && (
         <>
             <PedidosTable data={data} onRefresh={fetchPedidos} />

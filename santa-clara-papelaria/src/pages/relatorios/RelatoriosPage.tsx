@@ -103,7 +103,7 @@ const Relatorios = () => {
 
     return(
         <>
-            <h1>Relatórios</h1>
+            <h1 className='fw-bold mb-5'>Relatórios</h1>
             <Modal
                 open={loginModalOpen}
                 onCancel={handleCancel}
@@ -116,7 +116,9 @@ const Relatorios = () => {
             {isLoggedIn && localStorage.getItem('group') == 'V' && (
                 <>
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                            <Card title='Faturamento Total' style={{display: 'flex', flexDirection: 'column'}}>
+                            <Card title={
+                              <h4 className='fw-bold'>Faturamento total</h4>
+                            } className='shadow-sm' style={{display: 'flex', flexDirection: 'column'}}>
                                 <DatePicker placeholder='Data inicial' 
                                             style={{marginRight:'20px'}}
                                             value={dates.initialDate}
@@ -134,13 +136,17 @@ const Relatorios = () => {
                                 </div>
                             </Card>
                             <br/>
-                            <Card title='Produtos com Pouco Estoque'>
+                            <Card title={
+                              <h4 className='fw-bold '>Produtos com pouco estoque</h4>
+                            } className='shadow-sm'>
                                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     <Button type="primary" onClick={()=>handleDownload(request_url('estoque'), 'estoque')}><DownloadOutlined />Baixar</Button>
                                 </div>
                             </Card>
                             <br/>
-                            <Card title='Vendas por Vendedor'>
+                            <Card title={
+                              <h4 className='fw-bold'>Vendas Por vendedor</h4>
+                            } className='shadow-sm'>
                                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     <Button type="primary" onClick={()=>handleDownload(request_url('venda'), 'venda')}><DownloadOutlined />Baixar</Button>
                                 </div>

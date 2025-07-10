@@ -4,6 +4,8 @@ import axios from "axios";
 import DistribuidorTable from "../distribuidor/DistribuidorTable";
 import DistribuidorNovo from "./DistribuidorNovo";
 
+import { FunnelPlotOutlined, PlusOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+
 interface DataType{
     id_distribuidor: number,
     nome: string,
@@ -35,11 +37,12 @@ const Distribuidor = () =>{
             >
                 <DistribuidorNovo onClose={()=> setDistribuidorNovoModalIsOpen(false)} onUpdate={fetchData}/>
             </Modal>
-            <Card title='Distribuidores'>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button type="primary" onClick={()=>setDistribuidorNovoModalIsOpen(true)}>Adicionar Distribuidor</Button>
+            <Card title={
+                <div className="d-flex justify-content-between">
+                    <h4 className="fw-bold">Distribuidor</h4>
+                    <Button className="fs-5" type="primary" onClick={()=>setDistribuidorNovoModalIsOpen(true)}><PlusOutlined />Adicionar Distribuidor</Button>
                 </div>
-                <br/>
+            } className="shadow-sm">
                 <DistribuidorTable data={data} onUpdate={fetchData}/>
             </Card>
         </>

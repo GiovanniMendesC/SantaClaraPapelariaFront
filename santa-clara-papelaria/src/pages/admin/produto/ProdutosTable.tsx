@@ -42,28 +42,32 @@ interface ProdutosTableProps {
       {
         title: 'ID',
         dataIndex: 'cod_produto',
-        align: 'center'
+        align: 'center',
+        render: (text: string) => <span className='fs-6 fw-bold text-muted'>{text}</span>,
       },
       {
         title: 'Nome',
         dataIndex: 'nome',
-        render: (text: string) => <a>{text}</a>,
+        render: (text: string) => <span className='fs-6 fw-bold text-hover-primary'>{text}</span>,
       },
       {
         title: 'Preço',
         className: 'column-money',
         dataIndex: 'valor_produto',
         align: 'center',
+        render: (text: string) => <span className='badge text-bg-primary fs-6'>{text}</span>,
       },
       {
         title: 'Estoque',
         dataIndex: 'estoque',
         align: 'center',
+        render: (text: string) => <span className='badge text-bg-secondary fs-6'>{text}</span>,
       },
       {
         title: 'Descrição',
         dataIndex: 'desc_produto',
         align: 'left',
+        render: (text: string) => <span className='fs-6 fw-bold text-muted text-hover-primary'>{text}</span>,
       },
         {
             title: 'Alterar',

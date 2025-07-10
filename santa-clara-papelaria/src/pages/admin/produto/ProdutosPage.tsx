@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import ProdutosTable from "./ProdutosTable";
 import ProdutoNovo from "./ProdutoNovo";
 
+import {  PlusOutlined } from '@ant-design/icons';
+
 interface DataType {
     cod_produto: number;
     nome: string;
@@ -44,11 +46,12 @@ const Produto = () => {
             >
                 <ProdutoNovo onClose={()=> setProdutoNovoModalIsOpen(false)} onUpdate={fetchProdutos}/>
             </Modal>
-            <Card title='Produtos'>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button type="primary" onClick={()=>setProdutoNovoModalIsOpen(true)}>Adicionar Produto</Button>
+            <Card title={
+                <div className="d-flex justify-content-between">
+                    <h4 className="fw-bold">Produtos</h4>
+                    <Button className="fs-5" type="primary" onClick={()=>setProdutoNovoModalIsOpen(true)}><PlusOutlined />Adicionar Produto</Button>
                 </div>
-                <br/>
+            } className="shadow-sm">
                 <ProdutosTable data={data} onUpdate={fetchProdutos}/>
             </Card>
         </>

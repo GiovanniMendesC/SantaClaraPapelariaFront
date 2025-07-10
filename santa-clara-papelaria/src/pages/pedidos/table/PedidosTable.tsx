@@ -73,17 +73,18 @@ const PedidosTable: React.FC<PedidosTableProps> = ({data, onSelectProduto, onRef
         {
             title: 'ID',
             dataIndex: 'id_pedido',
-            align: 'center'
+            align: 'center',
+            render: (text) => <span className='fw-bold text-muted fs-6'>{text}</span>,
         },
         {
             title: 'Cliente',
             dataIndex: 'nome_cliente',
-            render: (text) => <a>{text}</a>,
+            render: (text) => <span className='fw-bold fs-6 text-hover-primary'>{text??'-'}</span>,
         },
         {
             title: 'Vendedor',
             dataIndex: 'nome_vendedor',
-            render: (text) => <a>{text}</a>,
+            render: (text) => <span className='fw-bold fs-6 text-hover-primary'>{text ?? '-'}</span>,
         },
         {
             title: 'Status do Pagamento',
@@ -92,13 +93,15 @@ const PedidosTable: React.FC<PedidosTableProps> = ({data, onSelectProduto, onRef
             render: (_, record) => {
                 const status = record.status_pagamento;
                 let color = '';
-        
-                if (status === 'confirmado') color = 'green';
-                else if (status === 'pendente') color = 'goldenrod';
-                else if (status === 'recusado') color = 'red';
-        
+                switch (status){
+                    case 'confirmado': color = 'success'
+                    break
+                    case 'pendente': color = 'warning'
+                    break
+                    case 'recusado': color = 'danger'
+                }
                 return (
-                    <span style={{ color }}>
+                    <span className={`fs-6 fw-bold badge text-bg-${color}`}>
                         {status.charAt(0).toUpperCase() + status.slice(1)}
                     </span>
                 );
@@ -108,6 +111,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({data, onSelectProduto, onRef
             title: 'Forma de Pagamento',
             dataIndex: 'forma_pagamento',
             align: 'center',
+            render: (text) => <span className='fs-6 fw-bold text-muted'>{text}</span>,
         },
         {
             title: 'Produtos',

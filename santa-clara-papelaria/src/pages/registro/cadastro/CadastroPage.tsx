@@ -64,9 +64,9 @@ const Cadastro = () =>{
     return(
         <>
             {contextHolder}
-            <h1>Cadastro</h1>
+            <h1 className="fw-bold mb-5">Cadastro</h1>
             <div style={{display:'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
-                <h2>Preencha com suas informações</h2>
+                <h2 className="mb-4">Preencha com suas informações</h2>
                 <form onSubmit={handleCadastro} style={{ width: '60%', display: 'flex', flexDirection: 'column', gap: '20px', position:'relative', maxWidth: '30vw'}}>
                   <Input
                   size="large"
@@ -113,7 +113,7 @@ const Cadastro = () =>{
                   />
                   
                   <div style={{display: 'flex', justifyContent: 'space-around'}}>
-                      <Button type="primary" htmlType="submit" style={{position: 'relative', width: '100vw'}} disabled={isInvalid()} loading={isLoading}>
+                      <Button className="fs-5" type="primary" htmlType="submit" style={{position: 'relative', width: '100vw'}} disabled={isInvalid()} loading={isLoading}>
                           Confirmar
                       </Button>
                   </div>

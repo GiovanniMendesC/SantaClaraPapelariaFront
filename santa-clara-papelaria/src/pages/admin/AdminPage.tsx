@@ -30,7 +30,7 @@ const Admin = () =>{
 
     return (
         <>
-            <h1>Administração</h1>
+            <h1 className="fw-bold mb-5">Administração</h1>
             <Modal
                 open={loginModalOpen}
                 onCancel={handleCancel}

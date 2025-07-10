@@ -4,6 +4,7 @@ import type { TableProps } from 'antd';
 import axios from 'axios';
 import DistribuidorAtualizar from './DisrtibuidorAtualizar';
 
+
 interface DataType{
     id_distribuidor: number,
     nome: string,
@@ -40,17 +41,19 @@ interface DistribuidorTableProps {
       {
         title: 'ID',
         dataIndex: 'id_distribuidor',
-        align: 'center'
+        align: 'center',
+        render: (text: string) => <span className='fs-6 fw-bold text-muted'>{text}</span>,
       },
       {
         title: 'Nome',
         dataIndex: 'nome',
-        render: (text: string) => <a>{text}</a>,
+        render: (text: string) => <span className='fs-6 fw-bold text-hover-primary'>{text}</span>,
       },
       {
         title: 'CNPJ',
         dataIndex: 'cnpj',
         align: 'center',
+        render: (text: string) => <span className='fw-bold text-primary fs-6 badge text-bg-light shadow-sm'>{text}</span>,
       },
         {
             title: 'Alterar',

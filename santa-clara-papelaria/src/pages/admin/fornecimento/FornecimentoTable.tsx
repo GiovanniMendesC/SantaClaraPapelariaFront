@@ -18,17 +18,19 @@ interface FornecimentoTableProps {
       {
         title: 'ID',
         dataIndex: 'id_fornecimento',
-        align: 'center'
+        align: 'center',
+        render: (text: string) => <span className='fs-6 fw-semibold text-muted'>{text}</span>,
       },
       {
         title: 'Fornecedor',
         dataIndex: 'fornecedor',
-        render: (text: string) => <a>{text}</a>,
+        render: (text: string) => <span className='fs-6 fw-bold text-hover-primary'>{text}</span>,
       },
       {
         title: 'Produto',
         dataIndex: 'produto',
-        align: 'center',
+        align: 'start',
+        render: (text: string) => <span className='fs-6 fw-bold text-hover-primary text-muted'>{text}</span>,
       },
     ] as TableProps<DataType>['columns'];
   
