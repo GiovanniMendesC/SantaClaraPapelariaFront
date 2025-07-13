@@ -54,8 +54,31 @@ const Cadastro = () =>{
         });
       };
 
+      const regexTelefone = /^\(?\d{2}\)?[\s-]?9\d{4}[-\s]?\d{4}$/;
+
+      const telefoneValido = regexTelefone.test(form.telefone);
+
+      const formatarTelefone = (valor: string) => {
+        const numeros = valor.replace(/\D/g, ''); // remove tudo que não for número
+
+        let resultado = '';
+
+        if (numeros.length > 0) resultado += '(' + numeros.slice(0, 2);
+        if (numeros.length >= 3) resultado += ') ' + numeros.slice(2, 3);
+        if (numeros.length >= 4) resultado += numeros.slice(3, 7);
+        if (numeros.length >= 8) resultado += '-' + numeros.slice(7, 11);
+
+        return resultado;
+      };
+
       const isInvalid = () =>{
-        if(form.email.length > 20 || form.telefone.length > 15){
+        if(form.telefone.length > 15 ||
+        !form.nome.trim() ||
+        !form.telefone.trim() ||
+        !form.senha.trim() ||
+        !form.email.trim() ||
+        !form.cidade.trim())
+        {
             return true;
         }
         return false;
@@ -80,8 +103,9 @@ const Cadastro = () =>{
                   size="large"
                   placeholder="Telefone"
                   maxLength={15}
+                  status={form.telefone && !telefoneValido ? 'error' : ''}
                   value={form.telefone}
-                  onChange={(e) => handleChange('telefone', e.target.value)}
+                  onChange={(e) => handleChange('telefone', formatarTelefone(e.target.value))}
                   prefix={<PhoneOutlined />}
                   required
                   />

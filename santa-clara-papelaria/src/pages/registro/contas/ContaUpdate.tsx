@@ -14,21 +14,20 @@ const ContaUpdate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [form, setForm] = useState<{
     nome: string;
-    telefone: string;
     email: string;
     senha: string;
     cidade: string;
   }>({
     nome: '',
-    telefone: '',
     email: '',
     senha: '',
     cidade: ''
   });
+  const [telefone, setTelefone] = useState('');
 
   const regexTelefone = /^\(?\d{2}\)?[\s-]?9\d{4}[-\s]?\d{4}$/;
 
-  const telefoneValido = regexTelefone.test(form.telefone);
+  const telefoneValido = regexTelefone.test(telefone);
 
   useEffect(() => {
     axios.get(`http://127.0.0.1:8000/api/cadastro/clientes/${id}/exibir/`)
@@ -41,13 +40,13 @@ const ContaUpdate: React.FC = () => {
     setIsLoading(true);
     axios.put(`http://127.0.0.1:8000/api/cadastro/clientes/${id}/alterar/`,{
         nome: form?.nome,
-        telefone: form?.telefone,
+        telefone: telefone,
         senha: form?.senha,
         email: form?.email,
         cidade: form?.cidade
     }).then(response => {
         if(response.status == 200){
-            login(form.telefone, 'C', id || '', form.nome);
+            login(id || '', 'C', id || '', form.nome);
             navigate('/conta')
 
     }})
@@ -63,7 +62,7 @@ const ContaUpdate: React.FC = () => {
   };
 
   const isInvalid = () => {
-    return form.email.length > 20 || form.telefone.length > 15 || !telefoneValido;
+    return telefone.length > 15 || !telefoneValido;
   };
 
   const formatarTelefone = (valor: string) => {
@@ -112,16 +111,15 @@ const ContaUpdate: React.FC = () => {
                                       className='fw-semibold fs-5' 
                                       required maxLength={15} 
                                       placeholder='Novo Telefone' 
-                                      status={form.telefone && !telefoneValido ? 'error' : ''}
-                                      onChange={(e) => handleChange('telefone', formatarTelefone(e.target.value))} 
-                                      value={form.telefone}>
+                                      status={telefone && !telefoneValido ? 'error' : ''}
+                                      onChange={(e) => setTelefone(formatarTelefone(e.target.value))} 
+                                      value={telefone}>
                                     </Input>
                                 </div>
                                 <br/>
                                 <div> <Text className="fs-6" strong>Email: </Text>
                                     <Input 
-                                      className='fw-semibold fs-5' 
-                                      required maxLength={20} 
+                                      className='fw-semibold fs-5'
                                       placeholder='Novo Email' 
                                       onChange={(e) => handleChange('email', e.target.value)} 
                                       value={form.email}>

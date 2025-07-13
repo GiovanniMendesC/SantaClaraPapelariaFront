@@ -45,12 +45,6 @@ const Conta = () =>{
                         <div className="text-hover-primary">
                             <Text  className="fs-6 fw-bold" strong>Nome:</Text> {localStorage.getItem('username')}
                         </div>
-                        <br/>
-                        <div className="text-hover-primary">
-                            <Text className="fs-6 fw-bold" strong>Login:</Text> {localStorage.getItem('login')}
-                        </div>
-                        <br/>
-                        <br/>
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             {localStorage.getItem('group') == 'C' && (
                                 <Link to={`/conta/${localStorage.getItem('id')}`}>

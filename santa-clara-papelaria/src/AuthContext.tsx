@@ -50,14 +50,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setIsLoggedIn(true);
         setLoginModalOpen(false);
     }else if(group == 'C'){
-        const response = await axios.get(`http://127.0.0.1:8000/api/cadastro/clientes/${id}/exibir/`);
-        setData(response.data);
+        // const response = await axios.get(`http://127.0.0.1:8000/api/cadastro/clientes/${id}/exibir/`);
+        // setData(response.data);
 
         if(data){
-            localStorage.setItem('login', response.data.telefone);
+            localStorage.setItem('login', id);
             localStorage.setItem('group', group);
             localStorage.setItem('id', id);
-            localStorage.setItem('username', response.data.nome);
+            localStorage.setItem('username', username);
                     
             setIsLoggedIn(true);
             setLoginModalOpen(false);
